@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, Calculator, GraduationCap, BookOpen, TrendingUp, Info, Check, Lock, Github } from 'lucide-react';
+import { Plus, Trash2, Calculator, GraduationCap, BookOpen, TrendingUp, Info, Check, Lock, Github, Sparkles } from 'lucide-react';
 import { Exam, Stats } from './types';
 
 const calculateStats = (examList: Exam[]): Stats => {
@@ -164,11 +164,12 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <main className="max-w-5xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Stats & Exams - Order 1 & 2 */}
+        <div className="lg:col-span-2 space-y-8 order-1">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="m3-card-indigo">
-              <div className="flex items-center justify-end gap-2 mb-4">
+              <div className="flex items-center justify-start gap-2 mb-4">
                 <Calculator className="w-5 h-5 opacity-80" />
                 <span className="text-xs font-bold uppercase tracking-wider opacity-80">Media LM-32</span>
               </div>
@@ -177,7 +178,7 @@ export default function App() {
             </div>
 
             <div className="m3-card-white">
-              <div className="flex items-center justify-end gap-2 mb-4">
+              <div className="flex items-center justify-start gap-2 mb-4">
                 <BookOpen className="w-5 h-5 text-indigo-600" />
                 <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Media Standard</span>
               </div>
@@ -185,9 +186,9 @@ export default function App() {
             </div>
 
             <div className="m3-card-white">
-              <div className="flex items-center justify-end gap-2 mb-4">
-                <Info className="w-5 h-5 text-indigo-600" />
-                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Merito</span>
+              <div className="flex items-center justify-start gap-2 mb-4">
+                <Sparkles className="w-5 h-5 text-indigo-600" />
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Extra</span>
               </div>
               <div className="space-y-2">
                 <div className={`flex items-center justify-between p-2 rounded-xl border text-xs font-bold ${stats.isLodeEligible ? 'bg-green-50 border-green-100 text-green-700' : 'bg-neutral-50 border-neutral-100 text-neutral-400'}`}>
@@ -201,34 +202,6 @@ export default function App() {
               </div>
             </div>
           </div>
-
-          <section className="m3-card-white">
-            <h2 className="text-lg font-bold mb-6 flex items-center gap-2"><GraduationCap className="w-5 h-5 text-indigo-600" />Simulazione Finale</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between mb-2"><label className="text-sm font-semibold">Punti Tesi (0-11)</label><span className="text-indigo-600 font-bold">{thesisPoints}</span></div>
-                  <input type="range" min="0" max="11" step="0.5" value={thesisPoints} onChange={e => setThesisPoints(parseFloat(e.target.value))} className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
-                </div>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 p-3 rounded-2xl bg-neutral-50 border border-neutral-100 cursor-pointer hover:bg-neutral-100 transition-colors">
-                    <input type="checkbox" checked={isErasmus} onChange={e => setIsErasmus(e.target.checked)} className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500" />
-                    <div className="text-sm font-bold">Bonus Erasmus (+1)</div>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 rounded-2xl bg-neutral-50 border border-neutral-100 cursor-pointer hover:bg-neutral-100 transition-colors">
-                    <input type="checkbox" checked={isInCourse} onChange={e => setIsInCourse(e.target.checked)} className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500" />
-                    <div className="text-sm font-bold">In Corso (+2)</div>
-                  </label>
-                </div>
-              </div>
-              <div className="bg-indigo-50 rounded-3xl p-6 flex flex-col justify-center items-center text-center">
-                <div className="text-neutral-500 text-xs font-bold uppercase tracking-widest mb-2">Voto Previsto</div>
-                <div className="text-6xl font-black text-indigo-600">{finalScore}</div>
-                <div className="text-indigo-400 text-sm mt-2">/ 110</div>
-                {finalScore >= 110 && stats.isLodeEligible && <div className="mt-4 bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold animate-pulse">CON LODE</div>}
-              </div>
-            </div>
-          </section>
 
           <section>
             <div className="flex items-center justify-between mb-4">
@@ -265,7 +238,8 @@ export default function App() {
           </section>
         </div>
 
-        <div className="space-y-6">
+        {/* Sidebar - Order 3 (Mobile) / Col 3 (Desktop) */}
+        <div className="space-y-6 order-2 lg:order-3 lg:col-start-3 lg:row-start-1 lg:row-span-2">
           <div className="m3-card-white">
             <h2 className="text-lg font-bold mb-6 flex items-center gap-2"><Plus className="w-5 h-5 text-indigo-600" />Nuovo Esame</h2>
             <form onSubmit={addExam} className="space-y-4">
@@ -289,7 +263,7 @@ export default function App() {
           </div>
 
           <div className="m3-card bg-neutral-900 text-white border-none">
-            <h2 className="text-lg font-bold mb-6 flex items-center gap-2"><TrendingUp className="w-5 h-5 text-indigo-400" />Simula Prossimo</h2>
+            <h2 className="text-lg font-bold mb-6 flex items-center gap-2"><TrendingUp className="w-5 h-5 text-indigo-400" />Simula Prossimo Esame</h2>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <input type="number" min="18" max="30" value={simGrade} onChange={e => setSimGrade(e.target.value)} placeholder="Voto" className="w-full bg-neutral-800 rounded-xl px-4 py-3 outline-none" />
@@ -308,6 +282,37 @@ export default function App() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Final Simulation - Order 4 (Mobile) / Col 1-2 (Desktop) */}
+        <div className="lg:col-span-2 order-3 lg:order-4">
+          <section className="m3-card-white">
+            <h2 className="text-lg font-bold mb-6 flex items-center gap-2"><GraduationCap className="w-5 h-5 text-indigo-600" />Simulazione Voto Finale</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between mb-2"><label className="text-sm font-semibold">Punti Tesi (0-11)</label><span className="text-indigo-600 font-bold">{thesisPoints}</span></div>
+                  <input type="range" min="0" max="11" step="0.5" value={thesisPoints} onChange={e => setThesisPoints(parseFloat(e.target.value))} className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-3 p-3 rounded-2xl bg-neutral-50 border border-neutral-100 cursor-pointer hover:bg-neutral-100 transition-colors">
+                    <input type="checkbox" checked={isErasmus} onChange={e => setIsErasmus(e.target.checked)} className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500" />
+                    <div className="text-sm font-bold">Bonus Erasmus (+1)</div>
+                  </label>
+                  <label className="flex items-center gap-3 p-3 rounded-2xl bg-neutral-50 border border-neutral-100 cursor-pointer hover:bg-neutral-100 transition-colors">
+                    <input type="checkbox" checked={isInCourse} onChange={e => setIsInCourse(e.target.checked)} className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500" />
+                    <div className="text-sm font-bold">In Corso (+2)</div>
+                  </label>
+                </div>
+              </div>
+              <div className="bg-indigo-50 rounded-3xl p-6 flex flex-col justify-center items-center text-center">
+                <div className="text-neutral-500 text-xs font-bold uppercase tracking-widest mb-2">Voto Previsto</div>
+                <div className="text-6xl font-black text-indigo-600">{finalScore}</div>
+                <div className="text-indigo-400 text-sm mt-2">/ 110</div>
+                {finalScore >= 110 && stats.isLodeEligible && <div className="mt-4 bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold animate-pulse">CON LODE</div>}
+              </div>
+            </div>
+          </section>
         </div>
       </main>
 
