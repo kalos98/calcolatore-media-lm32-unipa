@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Calcolatore Media LM-32 (Ingegneria Informatica)
 
-# Run and deploy your AI Studio app
+Un'applicazione web moderna e leggera (PWA) progettata specificamente per gli studenti del corso di laurea magistrale in Ingegneria Informatica (LM-32) dell'Università degli Studi di Palermo.
 
-This contains everything you need to run your app locally.
+## 🚀 Funzionalità Principali
 
-View your app in AI Studio: https://ai.studio/apps/1ec59698-5df1-4a36-b3d4-7e6fd605dc69
+- **Calcolo Media LM-32**: Implementa l'algoritmo ufficiale che esclude 6 CFU dell'esame con il voto più basso per il calcolo della media ponderata.
+- **Base di Laurea**: Calcolo automatico della base di partenza in centodecimi (110).
+- **Bonus Lodi**: Calcolo del bonus per le lodi (0.5 punti per lode, fino a un massimo di 3 punti).
+- **Simulazione Voto Finale**: Include cursori per simulare i punti della tesi (0-11) e bonus extra (Erasmus, In Corso).
+- **Simulazione Prossimo Esame**: Permette di vedere come un ipotetico voto influirebbe sulla media attuale.
+- **Privacy Totale**: Tutti i dati sono salvati localmente nel browser (localStorage). Nessun dato viene inviato a server esterni.
+- **Installabile (PWA)**: Può essere installata su Android e iOS come un'app nativa e funziona offline.
 
-## Run Locally
+## 🛠️ Tecnologie Utilizzate
 
-**Prerequisites:**  Node.js
+- **React 19** + **TypeScript**
+- **Vite** (Build tool ultra-veloce)
+- **Tailwind CSS** (Styling moderno e responsive)
+- **Lucide React** (Icone)
+- **Vite PWA Plugin** (Supporto Progressive Web App)
 
+## 📦 Installazione Locale
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. Clona il repository
+2. Installa le dipendenze: `npm install`
+3. Avvia in sviluppo: `npm run dev`
+4. Crea la build di produzione: `npm run build`
+
+## 📄 Licenza
+
+Distribuito sotto licenza Apache-2.0.
