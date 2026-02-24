@@ -1,5 +1,5 @@
 export interface Exam {
-  id?: number;
+  id?: number | string;
   name: string;
   grade: number;
   is_lode: boolean;
