@@ -182,7 +182,10 @@ export default function App() {
             <div className="bg-indigo-600 p-2 rounded-xl">
               <GraduationCap className="text-white w-6 h-6" />
             </div>
-            <h1 className="text-xl font-bold tracking-tight">Media Universitaria <span className="text-indigo-600 font-normal">LM-32</span></h1>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold tracking-tight leading-tight">Media Universitaria</h1>
+              <span className="text-indigo-600 font-semibold text-sm">LM-32 Ingegneria Informatica</span>
+            </div>
           </div>
           <div className="text-sm font-medium text-neutral-500">
             {stats.totalCFU} / 120 CFU
@@ -428,7 +431,7 @@ export default function App() {
           <div className="m3-card bg-neutral-900 text-white border-none">
             <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-indigo-400" />
-              Simula Prossimo
+              Simula prossimo esame
             </h2>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -471,8 +474,12 @@ export default function App() {
               {simulatedStats ? (
                 <div className="pt-4 border-t border-neutral-800 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-neutral-400">Nuova Media:</span>
+                    <span className="text-neutral-400">Nuova Media (LM-32):</span>
                     <span className="font-bold text-indigo-400">{simulatedStats.weightedAverage.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-400">Nuova Media (Std):</span>
+                    <span className="font-bold text-neutral-400">{simulatedStats.standardWeightedAverage.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-neutral-400">Nuova Base:</span>
