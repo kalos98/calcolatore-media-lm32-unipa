@@ -15,10 +15,10 @@ Un'applicazione web moderna e leggera (PWA) progettata specificamente per gli st
 ## 🛠️ Tecnologie Utilizzate
 
 - **React 19** + **TypeScript**
-- **Vite** (Build tool ultra-veloce)
-- **Tailwind CSS** (Styling moderno e responsive)
-- **Lucide React** (Icone)
-- **Vite PWA Plugin** (Supporto Progressive Web App)
+- **Vite** 
+- **Tailwind CSS** 
+- **Lucide React** 
+- **Vite PWA Plugin** 
 
 ## 📦 Installazione Locale
 
