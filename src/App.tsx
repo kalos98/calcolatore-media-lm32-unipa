@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, Calculator, GraduationCap, BookOpen, TrendingUp, Info, Check, Lock } from 'lucide-react';
+import { Plus, Trash2, Calculator, GraduationCap, BookOpen, TrendingUp, Info, Check, Lock, Github } from 'lucide-react';
 import { Exam, Stats } from './types';
 
 export default function App() {
@@ -16,6 +16,7 @@ export default function App() {
   const [grade, setGrade] = useState<string>('');
   const [isLode, setIsLode] = useState(false);
   const [cfu, setCfu] = useState<string>('');
+  const [isConvalida, setIsConvalida] = useState(false);
 
   // Simulation state
   const [simGrade, setSimGrade] = useState<string>('');
@@ -48,19 +49,20 @@ export default function App() {
     
     // Hardening: Input validation and sanitization
     const sanitizedName = name.trim().substring(0, 100);
-    const gradeNum = parseInt(grade);
+    const gradeNum = isConvalida ? 0 : parseInt(grade);
     const cfuNum = parseInt(cfu);
 
-    if (!sanitizedName || isNaN(gradeNum) || isNaN(cfuNum)) return;
-    if (gradeNum < 18 || gradeNum > 30) return;
+    if (!sanitizedName || (isNaN(gradeNum) && !isConvalida) || isNaN(cfuNum)) return;
+    if (!isConvalida && (gradeNum < 18 || gradeNum > 30)) return;
     if (cfuNum < 1 || cfuNum > 30) return;
 
     const newExam: Exam = {
       id: Date.now(),
       name: sanitizedName,
       grade: gradeNum,
-      is_lode: isLode && gradeNum === 30,
-      cfu: cfuNum
+      is_lode: !isConvalida && isLode && gradeNum === 30,
+      cfu: cfuNum,
+      isConvalida
     };
 
     const updatedExams = [...exams, newExam];
@@ -71,6 +73,7 @@ export default function App() {
     setGrade('');
     setCfu('');
     setIsLode(false);
+    setIsConvalida(false);
   };
 
   const deleteExam = (id: number) => {
@@ -95,15 +98,18 @@ export default function App() {
     }
 
     // 1. Find the lowest grade exam to apply the 6 CFU discount
+    // Important: ignore convalidated exams for average calculation
+    const gradableExams = examList.filter(e => !e.isConvalida);
+    
     let lowestGrade = 31;
     let lowestExamIndex = -1;
     
-    examList.forEach((e, index) => {
+    gradableExams.forEach((e, index) => {
       if (e.grade < lowestGrade) {
         lowestGrade = e.grade;
         lowestExamIndex = index;
       } else if (e.grade === lowestGrade) {
-        if (lowestExamIndex === -1 || e.cfu > examList[lowestExamIndex].cfu) {
+        if (lowestExamIndex === -1 || e.cfu > gradableExams[lowestExamIndex].cfu) {
           lowestExamIndex = index;
         }
       }
@@ -116,7 +122,7 @@ export default function App() {
     let totalArithmetic = 0;
     let lodeCount = 0;
 
-    examList.forEach((e, index) => {
+    gradableExams.forEach((e, index) => {
       if (e.is_lode) lodeCount++;
       
       // Standard calculation
@@ -131,9 +137,11 @@ export default function App() {
       totalArithmetic += e.grade;
     });
 
+    const totalCfuAll = examList.reduce((acc, e) => acc + e.cfu, 0);
+
     const weightedAverage = totalCfuUnipa > 0 ? totalWeightedUnipa / totalCfuUnipa : 0;
     const standardWeightedAverage = totalCfuStandard > 0 ? totalWeightedStandard / totalCfuStandard : 0;
-    const arithmeticAverage = totalArithmetic / examList.length;
+    const arithmeticAverage = gradableExams.length > 0 ? totalArithmetic / gradableExams.length : 0;
     const graduationBase = (weightedAverage * 11) / 3;
     
     const lodeBonus = Math.min(3, lodeCount * 0.5);
@@ -144,7 +152,7 @@ export default function App() {
       standardWeightedAverage,
       arithmeticAverage, 
       graduationBase, 
-      totalCFU: totalCfuStandard,
+      totalCFU: totalCfuAll,
       lodeBonus,
       initialBase,
       isLodeEligible: initialBase >= 102,
@@ -187,8 +195,16 @@ export default function App() {
               <span className="text-indigo-600 font-semibold text-sm">LM-32 Ingegneria Informatica</span>
             </div>
           </div>
-          <div className="text-sm font-medium text-neutral-500">
-            {stats.totalCFU} / 120 CFU
+          <div className="flex items-center gap-4">
+            <a 
+              href="https://github.com/kalos98/calcolatore-media-lm32-unipa" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="p-2 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all"
+              title="GitHub Repository"
+            >
+              <Github className="w-6 h-6" />
+            </a>
           </div>
         </div>
       </header>
@@ -322,6 +338,38 @@ export default function App() {
                   {exams.length}
                 </span>
               </h2>
+              <div className="flex items-center gap-3 bg-white px-3 py-1.5 rounded-2xl border border-neutral-100 shadow-sm">
+                <div className="relative w-8 h-8">
+                  <svg className="w-full h-full transform -rotate-90">
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="14"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="transparent"
+                      className="text-neutral-100"
+                    />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="14"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="transparent"
+                      strokeDasharray={2 * Math.PI * 14}
+                      strokeDashoffset={2 * Math.PI * 14 * (1 - Math.min(stats.totalCFU / 120, 1))}
+                      className="text-indigo-600 transition-all duration-500"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center text-[8px] font-bold text-indigo-600">
+                    {Math.round(Math.min(stats.totalCFU / 120, 1) * 100)}%
+                  </div>
+                </div>
+                <div className="text-xs font-bold text-neutral-500">
+                  <span className="text-indigo-600">{stats.totalCFU}</span> / 120 CFU
+                </div>
+              </div>
             </div>
 
             {loading ? (
@@ -340,12 +388,12 @@ export default function App() {
                     className="m3-card-white py-4 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-4 overflow-hidden">
-                      <div className="w-12 h-12 flex-shrink-0 bg-indigo-50 rounded-2xl flex items-center justify-center font-bold text-indigo-600 border border-indigo-100">
-                        {exam.grade}{exam.is_lode ? 'L' : ''}
+                      <div className={`w-12 h-12 flex-shrink-0 ${exam.isConvalida ? 'bg-neutral-100 text-neutral-400' : 'bg-indigo-50 text-indigo-600'} rounded-2xl flex items-center justify-center font-bold border ${exam.isConvalida ? 'border-neutral-200' : 'border-indigo-100'}`}>
+                        {exam.isConvalida ? 'C' : `${exam.grade}${exam.is_lode ? 'L' : ''}`}
                       </div>
                       <div className="min-w-0">
                         <h3 className="font-semibold text-neutral-800 truncate">{exam.name}</h3>
-                        <p className="text-sm text-neutral-500">{exam.cfu} CFU</p>
+                        <p className="text-sm text-neutral-500">{exam.cfu} CFU {exam.isConvalida && '• Convalida'}</p>
                       </div>
                     </div>
                     <button 
@@ -392,8 +440,9 @@ export default function App() {
                     value={grade}
                     onChange={(e) => setGrade(e.target.value)}
                     placeholder="18-30"
-                    className="m3-input"
-                    required
+                    className="m3-input disabled:opacity-50 disabled:bg-neutral-50"
+                    required={!isConvalida}
+                    disabled={isConvalida}
                   />
                 </div>
                 <div>
@@ -409,16 +458,34 @@ export default function App() {
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-2 py-2">
-                <input 
-                  type="checkbox" 
-                  id="lode"
-                  checked={isLode}
-                  onChange={(e) => setIsLode(e.target.checked)}
-                  disabled={grade !== '30'}
-                  className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label htmlFor="lode" className="text-sm font-medium text-neutral-600">30 e Lode</label>
+              <div className="flex flex-col gap-2 py-2">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    id="convalida"
+                    checked={isConvalida}
+                    onChange={(e) => {
+                      setIsConvalida(e.target.checked);
+                      if (e.target.checked) {
+                        setGrade('');
+                        setIsLode(false);
+                      }
+                    }}
+                    className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <label htmlFor="convalida" className="text-sm font-medium text-neutral-600">Materia a convalida</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    id="lode"
+                    checked={isLode}
+                    onChange={(e) => setIsLode(e.target.checked)}
+                    disabled={grade !== '30' || isConvalida}
+                    className="w-5 h-5 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500 disabled:opacity-30"
+                  />
+                  <label htmlFor="lode" className="text-sm font-medium text-neutral-600 disabled:opacity-30">30 e Lode</label>
+                </div>
               </div>
               <button type="submit" className="m3-button-primary w-full flex items-center justify-center gap-2">
                 <Plus className="w-5 h-5" />

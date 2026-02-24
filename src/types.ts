@@ -4,6 +4,7 @@ export interface Exam {
   grade: number;
   is_lode: boolean;
   cfu: number;
+  isConvalida?: boolean;
 }
 
 export interface Stats {
