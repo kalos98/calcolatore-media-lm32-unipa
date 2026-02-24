@@ -312,13 +312,30 @@ export default function App() {
         </div>
       </main>
 
+      {/* Footer Notes */}
       <footer className="max-w-5xl mx-auto px-4 pt-8 pb-12">
-        <div className="bg-white rounded-3xl p-6 border border-neutral-100 text-xs text-neutral-500 space-y-4">
-          <h3 className="text-sm font-bold text-neutral-800 flex items-center gap-2"><Info className="w-4 h-4 text-indigo-600" />Regolamento LM-32</h3>
-          <ul className="space-y-2">
-            <li>• <strong>Sconto 6 CFU:</strong> Esclusione del voto più basso (max 6 CFU).</li>
-            <li>• <strong>Bonus Lodi:</strong> 0.5 punti per lode (max 3 punti).</li>
-            <li>• <strong>Arrotondamento:</strong> All'intero più vicino.</li>
+        <div className="bg-white rounded-3xl p-6 border border-neutral-100 shadow-sm">
+          <h3 className="text-sm font-bold text-neutral-800 mb-4 flex items-center gap-2">
+            <Info className="w-4 h-4 text-indigo-600" />
+            Note sul Regolamento (LM-32)
+          </h3>
+          <ul className="space-y-3 text-xs text-neutral-500 leading-relaxed">
+            <li className="flex gap-2">
+              <span className="text-indigo-600 font-bold">•</span>
+              <span><strong>Sconto 6 CFU:</strong> Dal calcolo della media ponderata viene escluso il voto più basso (per un peso massimo di 6 CFU). Se l'esame ha più di 6 CFU, viene calcolato solo per la parte eccedente.</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-indigo-600 font-bold">•</span>
+              <span><strong>Bonus Lodi:</strong> Ogni lode aggiunge 0.5 punti alla base di laurea (110), fino a un massimo di 3 punti totali.</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-indigo-600 font-bold">•</span>
+              <span><strong>Arrotondamento:</strong> Il voto finale viene arrotondato all'intero più vicino (es. 102.50 → 103, 102.49 → 102).</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-indigo-600 font-bold">•</span>
+              <span><strong>Lode e Menzione:</strong> La lode è attribuibile se la base di partenza è ≥ 102/110. La menzione richiede una base ≥ 108/110 e l'unanimità della commissione.</span>
+            </li>
           </ul>
         </div>
       </footer>
