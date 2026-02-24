@@ -1,0 +1,5 @@
+{
+  "name": "Media Universitaria Pro",
+  "description": "Calcolatore di media ponderata universitaria con simulazione esami e persistenza dati.",
+  "requestFramePermissions": []
+}
