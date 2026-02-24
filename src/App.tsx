@@ -182,7 +182,6 @@ export default function App() {
                 <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Media Standard</span>
               </div>
               <div className="text-4xl font-bold">{stats.standardWeightedAverage.toFixed(2)}</div>
-              <div className="mt-1 text-xs text-neutral-500">Senza sconto 6 CFU</div>
             </div>
 
             <div className="m3-card-white">
